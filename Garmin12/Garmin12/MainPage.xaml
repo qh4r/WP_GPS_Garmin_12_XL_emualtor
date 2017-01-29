@@ -10,20 +10,53 @@
     <Page.DataContext>
         <Binding Source="{StaticResource Locator}" Path="Main"></Binding>
     </Page.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="1" HorizontalAlignment="Center">Hello!</TextBlock>
-        <Button Grid.Row ="2" HorizontalAlignment="Stretch" Command="{Binding RiseCommand}">Rise!</Button>
-        <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="{Binding Counter}"/>
-        <TextBlock Grid.Row="4" HorizontalAlignment="Center" Text="Position:"/>
-        <TextBlock Grid.Row="5" HorizontalAlignment="Center" Text="{Binding PositionFormatted}"/>
-    </Grid>
+    <Page.Resources>
+        <DataTemplate x:Key="PositionRowTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Stretch" Grid.Column="0" Text="{Binding Name}"/>
+                <Button Grid.Column="1" Command="{Binding DataContext.DeletePositionCommand, ElementName=PositionListGrid}"
+                        CommandParameter="{Binding}">Usuń</Button>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Pivot x:Uid="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
+        <PivotItem CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="1" HorizontalAlignment="Center">Hello!</TextBlock>
+                <Button Grid.Row ="2" HorizontalAlignment="Stretch" Command="{Binding RiseCommand}">Rise!</Button>
+                <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="{Binding Counter}"/>
+                <TextBlock Grid.Row="4" HorizontalAlignment="Center" Text="Position:"/>
+                <TextBlock Grid.Row="5" HorizontalAlignment="Center" Text="{Binding PositionFormatted}"/>
+            </Grid>
+        </PivotItem>
+        <PivotItem CommonNavigationTransitionInfo.IsStaggerElement="True">
+            <Grid x:Name="PositionListGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding NewPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="1" Command="{Binding SavePositionCommand}">Zapisz</Button>
+                <ListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataService.SortedPositions}" ItemTemplate="{StaticResource PositionRowTemplate}"/>
+            </Grid>
+        </PivotItem>
+    </Pivot>
 </Page>
+

@@ -10,24 +10,25 @@ namespace Garmin12.Models
 
     public class PositionsStore
     {
-        private SQLiteConnection positionsConnection;
-
         public bool Initialized { get; private set; } = false;
+
+        public string DbPath { get; private set; }
 
         public PositionsStore()
         {
-            
+
         }
 
         public bool InitializeConnection(string dbPath)
         {
+            this.DbPath = dbPath;
             try
             {
                 if (!this.CheckFileExists(dbPath).Result)
                 {
-                    using (this.positionsConnection = new SQLiteConnection(dbPath))
+                    using (var positionsConnection = new SQLiteConnection(dbPath))
                     {
-                        this.positionsConnection.CreateTable<PositionEntity>();
+                        positionsConnection.CreateTable<PositionEntity>();
                     }
                 }
                 this.Initialized = true;
@@ -49,6 +50,35 @@ namespace Garmin12.Models
             catch
             {
                 return false;
+            }
+        }
+
+        public List<PositionEntity> FetchPositions()
+        {
+            using (var db = new SQLiteConnection(this.DbPath))
+            {
+                var positions = db.Table<PositionEntity>().ToList<PositionEntity>();
+                return positions;
+            }
+        }
+
+        public int InsertPosition(PositionEntity newcontact)
+        {
+            using (var db = new SQLiteConnection(this.DbPath))
+            {
+               return db.Insert(newcontact);
+            }
+        }
+
+        public void DeletePosition(int id)
+        {
+            using (var db = new SQLiteConnection(this.DbPath))
+            {
+                var position = db.Query<PositionEntity>("select * from PositionEntity where Id =" + id).FirstOrDefault();
+                if (position != null)
+                {
+                    db.Delete(position);
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 namespace Garmin12.ViewModel
 {
     using System;
+    using System.Threading.Tasks;
 
     using GalaSoft.MvvmLight.Command;
     using GalaSoft.MvvmLight.Threading;
@@ -17,6 +18,17 @@ namespace Garmin12.ViewModel
         private int counter;
 
         private GpsPosition position;
+
+        private string newPositionName;
+
+        public MainViewModel(LocationService locationService, DataService dataDataService)
+        {
+            this.Position = new GpsPosition(0, 0);
+            this.locationService = locationService;
+            this.DataService = dataDataService;
+            this.Counter = 0;
+            this.locationService.LocationUpdate += this.OnLocationUpdate;
+        }
 
         public int Counter
         {
@@ -45,17 +57,34 @@ namespace Garmin12.ViewModel
             }
         }
 
-        public string PositionFormatted => $"X: {this.Position.Latitude},\nY: {this.Position.Longitude}";       
+        public string PositionFormatted => $"X: {this.Position.Latitude},\nY: {this.Position.Longitude}";
 
-        public MainViewModel(LocationService locationService)
+        public string NewPositionName
         {
-            this.Position = new GpsPosition(0,0);
-            this.locationService = locationService;
-            this.Counter = 0;
-            this.locationService.LocationUpdate += this.OnLocationUpdate;
+            get
+            {
+                return this.newPositionName;
+            }
+            set
+            {
+                this.Set(ref this.newPositionName, value);
+            }
         }
 
-        private async void  OnLocationUpdate(GpsPosition gpsPosition)
+        public RelayCommand SavePositionCommand => new RelayCommand(
+            () =>
+            {
+                this.DataService.SavePosition(this.NewPositionName, this.Position);
+                this.NewPositionName = string.Empty;
+            });
+
+        public DataService DataService { get; }
+
+        public RelayCommand<PositionEntity> DeletePositionCommand
+            => new RelayCommand<PositionEntity>(
+                position => this.DataService.DeletePositon(position));
+
+        private async void OnLocationUpdate(GpsPosition gpsPosition)
         {
             await DispatcherHelper.RunAsync(
                 () =>

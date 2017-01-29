@@ -28,6 +28,7 @@ namespace Garmin12.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<DataService>();
             SimpleIoc.Default.Register<PositionsStore>();
             SimpleIoc.Default.Register<Constants>();
             SimpleIoc.Default.Register<LocationService>();
