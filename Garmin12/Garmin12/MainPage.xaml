@@ -6,9 +6,24 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" FontSize="42">
+    <Page.DataContext>
+        <Binding Source="{StaticResource Locator}" Path="Main"></Binding>
+    </Page.DataContext>
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center">Hello!</TextBlock>
+        <Button Grid.Row ="2" HorizontalAlignment="Stretch" Command="{Binding RiseCommand}">Rise!</Button>
+        <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="{Binding Counter}"/>
+        <TextBlock Grid.Row="4" HorizontalAlignment="Center" Text="Position:"/>
+        <TextBlock Grid.Row="5" HorizontalAlignment="Center" Text="{Binding PositionFormatted}"/>
     </Grid>
 </Page>

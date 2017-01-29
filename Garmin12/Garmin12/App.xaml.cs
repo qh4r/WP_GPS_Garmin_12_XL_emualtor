@@ -20,6 +20,8 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Garmin12
 {
+    using GalaSoft.MvvmLight.Threading;
+
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
@@ -102,6 +104,7 @@ namespace Garmin12
 
             // Ensure the current window is active
             Window.Current.Activate();
+            DispatcherHelper.Initialize();
         }
 
         /// <summary>
