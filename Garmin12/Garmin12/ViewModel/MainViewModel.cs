@@ -3,46 +3,41 @@ using GalaSoft.MvvmLight;
 namespace Garmin12.ViewModel
 {
     using System;
+    using System.Diagnostics;
     using System.Threading.Tasks;
+
+    using Windows.UI.Xaml.Controls;
 
     using GalaSoft.MvvmLight.Command;
     using GalaSoft.MvvmLight.Threading;
 
     using Garmin12.Models;
     using Garmin12.Services;
+    using Garmin12.Store;
 
     public class MainViewModel : ViewModelBase
     {
         private readonly LocationService locationService;
 
-        private int counter;
+        private readonly CompassService compassService;
 
         private GpsPosition position;
 
         private string newPositionName;
 
-        public MainViewModel(LocationService locationService, DataService dataDataService)
+        private CompassData compassDirection;
+
+        public MainViewModel(LocationService locationService, DataService dataDataService, SelectedPositionStore selectedPositionStore, CompassService compassService)
         {
             this.Position = new GpsPosition(0, 0);
+            this.CompassDirection = new CompassData(0);
             this.locationService = locationService;
+            this.compassService = compassService;
+            this.PositionStore = selectedPositionStore;
             this.DataService = dataDataService;
-            this.Counter = 0;
             this.locationService.LocationUpdate += this.OnLocationUpdate;
+            this.compassService.OnCompassReading += this.CompassReadingUpdate;
         }
-
-        public int Counter
-        {
-            get
-            {
-                return this.counter;
-            }
-            set
-            {
-                this.Set(ref this.counter, value);
-            }
-        }
-
-        public RelayCommand RiseCommand => new RelayCommand(() => this.Counter += 1);
 
         public GpsPosition Position
         {
@@ -81,8 +76,30 @@ namespace Garmin12.ViewModel
         public DataService DataService { get; }
 
         public RelayCommand<PositionEntity> DeletePositionCommand
-            => new RelayCommand<PositionEntity>(
-                position => this.DataService.DeletePositon(position));
+            => new RelayCommand<PositionEntity>(position => this.DataService.DeletePositon(position));
+
+        public RelayCommand ItemSelectionCommand => new RelayCommand(
+            () =>
+                {
+                    Debug.WriteLine($"{this.PositionStore.SelectedPosition?.Name} : {this.PositionStore.SelectedPosition?.Longitude} x {this.PositionStore.SelectedPosition?.Latitude}");
+                });
+
+        public SelectedPositionStore PositionStore { get; }
+
+        public CompassData CompassDirection
+        {
+            get
+            {
+                return this.compassDirection;
+            }
+            set
+            {
+                this.Set(ref this.compassDirection, value);
+                this.RaisePropertyChanged(() => this.CompassDirectionDisplay);
+            }
+        }
+
+        public string CompassDirectionDisplay => $"{this.CompassDirection.North}";
 
         private async void OnLocationUpdate(GpsPosition gpsPosition)
         {
@@ -91,6 +108,15 @@ namespace Garmin12.ViewModel
                     {
                         this.Position = gpsPosition;
                     });
+        }
+
+        private async void CompassReadingUpdate(CompassData compassData)
+        {
+            await DispatcherHelper.RunAsync(
+               () =>
+               {
+                   this.CompassDirection = compassData;
+               });
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Garmin12.ViewModel
     using Garmin12.Models;
     using Garmin12.Resources;
     using Garmin12.Services;
+    using Garmin12.Store;
 
     public class ViewModelLocator
     {
@@ -28,6 +29,8 @@ namespace Garmin12.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<CompassService>();
+            SimpleIoc.Default.Register<SelectedPositionStore>();
             SimpleIoc.Default.Register<DataService>();
             SimpleIoc.Default.Register<PositionsStore>();
             SimpleIoc.Default.Register<Constants>();
