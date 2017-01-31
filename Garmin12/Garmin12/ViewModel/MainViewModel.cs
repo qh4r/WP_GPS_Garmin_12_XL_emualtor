@@ -26,8 +26,6 @@ namespace Garmin12.ViewModel
 
         private GpsPosition position;
 
-        private string newPositionName;
-
         private CompassData compassDirection;
 
         public MainViewModel(LocationService locationService,
@@ -62,24 +60,7 @@ namespace Garmin12.ViewModel
 
         public string PositionFormatted => $"X: {this.Position.Latitude},\nY: {this.Position.Longitude}";
 
-        public string NewPositionName
-        {
-            get
-            {
-                return this.newPositionName;
-            }
-            set
-            {
-                this.Set(ref this.newPositionName, value);
-            }
-        }
 
-        public RelayCommand SavePositionCommand => new RelayCommand(
-            () =>
-            {
-                this.DataService.SavePosition(this.NewPositionName, this.Position);
-                this.NewPositionName = string.Empty;
-            });
 
         public DataService DataService { get; }
 
@@ -113,6 +94,8 @@ namespace Garmin12.ViewModel
         public double CompassDirectionNormalized => 360 - this.CompassDirection.North;
 
         public RelayCommand GoToPointCreation => new RelayCommand(() => this.navigationService.NavigateTo("newPosition"));
+
+        public RelayCommand ClearFilter => new RelayCommand(() => this.DataService.NameFilter = string.Empty);
 
         private async void OnLocationUpdate(GpsPosition gpsPosition)
         {

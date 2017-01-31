@@ -139,10 +139,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding NewPositionName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <Button Grid.Row="0" Grid.Column="1" Command="{Binding SavePositionCommand}">Zapisz</Button>
+                <TextBox Grid.Row="0" Grid.Column="0" Text="{Binding DataService.NameFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="1" Command="{Binding ClearFilter}">Wyczyść</Button>
                 <ListView HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionMode="Single" SelectedItem="{Binding PositionStore.SelectedPosition, Mode=TwoWay}"
-                          Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataService.SortedPositions}" ItemContainerStyle="{StaticResource PositionItemStyle}"
+                          Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding DataService.FilteredPositions}" ItemContainerStyle="{StaticResource PositionItemStyle}"
                           ItemTemplate="{StaticResource PositionItemDataTemplate}">
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SelectionChanged">

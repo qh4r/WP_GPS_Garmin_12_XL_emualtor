@@ -24,6 +24,8 @@ namespace Garmin12.Services
 
         private ObservableCollection<PositionEntity> positionsList;
 
+        private string nameFilter;
+
         public DataService(PositionsStore positionsStore, Constants constants)
         {
             this.store = positionsStore;
@@ -46,8 +48,23 @@ namespace Garmin12.Services
             }
         }
 
-        public ObservableCollection<PositionEntity> SortedPositions
-            => new ObservableCollection<PositionEntity>(this.PositionsList.OrderBy(x => x.Id));
+        public ObservableCollection<PositionEntity> FilteredPositions
+            => new ObservableCollection<PositionEntity>(this.PositionsList
+                .Where(x => string.IsNullOrWhiteSpace(this.NameFilter) 
+                || x.Name.ToLower().Contains(this.NameFilter.ToLower())).OrderBy(x => x.Id));
+
+        public string NameFilter
+        {
+            get
+            {
+                return this.nameFilter;
+            }
+            set
+            {
+                this.Set(ref this.nameFilter, value);
+                this.RaisePropertyChanged(() => this.FilteredPositions);
+            }
+        }
 
         public async void SavePosition(string name, GpsPosition location)
         {
@@ -63,7 +80,7 @@ namespace Garmin12.Services
                 () =>
                     {
                         this.PositionsList.Add(serializedPosition);
-                        this.RaisePropertyChanged(() => this.SortedPositions);
+                        this.RaisePropertyChanged(() => this.FilteredPositions);
                     });
         }
 
@@ -80,7 +97,7 @@ namespace Garmin12.Services
                                     () =>
                                         {
                                             this.PositionsList.Remove(position);
-                                            this.RaisePropertyChanged(() => this.SortedPositions);
+                                            this.RaisePropertyChanged(() => this.FilteredPositions);
                                         });
                             });
         }
