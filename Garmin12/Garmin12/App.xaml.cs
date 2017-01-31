@@ -47,6 +47,8 @@ namespace Garmin12
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            DispatcherHelper.Initialize();
+
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -104,7 +106,6 @@ namespace Garmin12
 
             // Ensure the current window is active
             Window.Current.Activate();
-            DispatcherHelper.Initialize();
         }
 
         /// <summary>

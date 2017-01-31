@@ -90,6 +90,9 @@
     <Compile Include="Models\CompassData.cs" />
     <Compile Include="Models\PositionEntity.cs" />
     <Compile Include="Models\PositionsStore.cs" />
+    <Compile Include="NewPositionPage.xaml.cs">
+      <DependentUpon>NewPositionPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\GpsPosition.cs" />
     <Compile Include="Resources\Constants.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="Services\LocationService.cs" />
     <Compile Include="Store\SelectedPositionStore.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\NewPositionViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +125,15 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewPositionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\CompassBackground.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
   </ItemGroup>
   <ItemGroup>

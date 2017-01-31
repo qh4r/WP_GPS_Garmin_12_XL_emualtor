@@ -15,6 +15,8 @@ namespace Garmin12.Services
         public event Action<GpsPosition> LocationUpdate;
         private readonly Geolocator geolocator;
 
+        private GpsPosition lastPosition;
+
         public LocationService()
         {
             this.geolocator = new Geolocator
@@ -27,11 +29,17 @@ namespace Garmin12.Services
             this.geolocator.PositionChanged += this.GeolocatorOnPositionChanged;
         }
 
+        public GpsPosition GetLastPostion()
+        {
+            return this.lastPosition;
+        }
+
         private void GeolocatorOnPositionChanged(Geolocator sender, PositionChangedEventArgs args)
         {
-            this.LocationUpdate?.Invoke(new GpsPosition(
-                args.Position.Coordinate.Point.Position.Latitude, 
-                args.Position.Coordinate.Point.Position.Longitude));
+            this.lastPosition = new GpsPosition(
+                args.Position.Coordinate.Point.Position.Latitude,
+                args.Position.Coordinate.Point.Position.Longitude);
+            this.LocationUpdate?.Invoke(this.lastPosition);
         }
     }
 }

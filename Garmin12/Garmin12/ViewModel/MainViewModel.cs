@@ -10,6 +10,7 @@ namespace Garmin12.ViewModel
 
     using GalaSoft.MvvmLight.Command;
     using GalaSoft.MvvmLight.Threading;
+    using GalaSoft.MvvmLight.Views;
 
     using Garmin12.Models;
     using Garmin12.Services;
@@ -21,22 +22,29 @@ namespace Garmin12.ViewModel
 
         private readonly CompassService compassService;
 
+        private readonly NavigationService navigationService;
+
         private GpsPosition position;
 
         private string newPositionName;
 
         private CompassData compassDirection;
 
-        public MainViewModel(LocationService locationService, DataService dataDataService, SelectedPositionStore selectedPositionStore, CompassService compassService)
+        public MainViewModel(LocationService locationService,
+            DataService dataDataService,
+            SelectedPositionStore selectedPositionStore,
+            CompassService compassService,
+            NavigationService navigationService)
         {
             this.Position = new GpsPosition(0, 0);
             this.CompassDirection = new CompassData(0);
             this.locationService = locationService;
             this.compassService = compassService;
+            this.navigationService = navigationService;
             this.PositionStore = selectedPositionStore;
             this.DataService = dataDataService;
             this.locationService.LocationUpdate += this.OnLocationUpdate;
-            this.compassService.OnCompassReading += this.CompassReadingUpdate;
+            this.compassService.OnCompassReading += this.CompassReadingUpdate;           
         }
 
         public GpsPosition Position
@@ -96,10 +104,15 @@ namespace Garmin12.ViewModel
             {
                 this.Set(ref this.compassDirection, value);
                 this.RaisePropertyChanged(() => this.CompassDirectionDisplay);
+                this.RaisePropertyChanged(() => this.CompassDirectionNormalized);
             }
         }
 
         public string CompassDirectionDisplay => $"{this.CompassDirection.North}";
+
+        public double CompassDirectionNormalized => 360 - this.CompassDirection.North;
+
+        public RelayCommand GoToPointCreation => new RelayCommand(() => this.navigationService.NavigateTo("newPosition"));
 
         private async void OnLocationUpdate(GpsPosition gpsPosition)
         {
