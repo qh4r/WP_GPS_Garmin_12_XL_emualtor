@@ -8,6 +8,7 @@ using Garmin12.Resources;
 namespace Garmin12.Services
 {
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
 
     using Windows.UI.Core;
 
@@ -15,10 +16,13 @@ namespace Garmin12.Services
     using GalaSoft.MvvmLight.Threading;
 
     using Garmin12.Models;
+    using Garmin12.Store;
 
     public class DataService : ViewModelBase
     {
         private readonly Constants constants;
+
+        private readonly SelectedPositionStore selectedPositionStore;
 
         private PositionsStore store;
 
@@ -26,10 +30,11 @@ namespace Garmin12.Services
 
         private string nameFilter;
 
-        public DataService(PositionsStore positionsStore, Constants constants)
+        public DataService(PositionsStore positionsStore, Constants constants, SelectedPositionStore selectedPositionStore)
         {
             this.store = positionsStore;
             this.constants = constants;
+            this.selectedPositionStore = selectedPositionStore;
             this.store.InitializeConnection(constants.DbPath);       
         }    
 
@@ -97,7 +102,7 @@ namespace Garmin12.Services
                                     () =>
                                         {
                                             this.PositionsList.Remove(position);
-                                            this.RaisePropertyChanged(() => this.FilteredPositions);
+                                            this.RaisePropertyChanged(() => this.FilteredPositions);                                            
                                         });
                             });
         }

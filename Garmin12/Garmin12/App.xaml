@@ -2,6 +2,7 @@
   <Application.Resources>
     <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Converters/Converters.xaml"/>
             <ResourceDictionary Source="Resources/CompassBackground.xaml"/>
             <ResourceDictionary>
                     <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="using:Garmin12.ViewModel" />

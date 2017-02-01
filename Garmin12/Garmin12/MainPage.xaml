@@ -71,8 +71,17 @@
     <Pivot x:Uid="Pivot" CommonNavigationTransitionInfo.IsStaggerElement="True">
         <PivotItem CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Visibility="{Binding PositionStore.IsPositionSelected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding TargetDirection}"
+                           HorizontalAlignment="Center" Grid.Row="0"/>
+                <TextBlock Opacity="{Binding PositionStore.IsPositionSelected, Converter={StaticResource BooleanToNegativeOpacityConverter}}" Text="Nie wybrano celu"
+                           HorizontalAlignment="Center" Grid.Row="0"/>
                 <Viewbox Stretch="Uniform" StretchDirection="DownOnly" 
-                         HorizontalAlignment="Center" 
+                         HorizontalAlignment="Center" Grid.Row="1"
                          VerticalAlignment="Center">
                     <Viewbox.RenderTransformOrigin>
                         0.5,0.5
@@ -108,6 +117,8 @@
                         </Canvas>
                     </Canvas>
                 </Viewbox>
+                <TextBlock Visibility="{Binding PositionStore.IsPositionSelected, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding DistanceToTarget}"
+                           HorizontalAlignment="Center" Grid.Row="2"/>
             </Grid>
         </PivotItem>
         <PivotItem CommonNavigationTransitionInfo.IsStaggerElement="True">

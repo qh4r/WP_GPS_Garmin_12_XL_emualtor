@@ -7,6 +7,8 @@ using SQLite;
 
 namespace Garmin12.Models
 {
+    using Garmin12.Extensions;
+
     public class PositionEntity
     {
         [PrimaryKey, AutoIncrement]
@@ -14,5 +16,9 @@ namespace Garmin12.Models
         public string Name { get; set; }
         public double Latitude { get; set; }    
         public double Longitude { get; set; }
+        [Ignore]
+        public double LatitudeRad => this.Latitude.DegreeToRadians();
+        [Ignore]
+        public double LongitudeRad => this.Longitude.DegreeToRadians();
     }
 }

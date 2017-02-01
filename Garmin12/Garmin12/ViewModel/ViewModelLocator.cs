@@ -23,6 +23,7 @@ namespace Garmin12.ViewModel
             SimpleIoc.Default.Register<CompassService>();
             SimpleIoc.Default.Register<SelectedPositionStore>();
             SimpleIoc.Default.Register<DataService>();
+            SimpleIoc.Default.Register<DirectionService>();
             SimpleIoc.Default.Register<PositionsStore>();
             SimpleIoc.Default.Register<Constants>();
             SimpleIoc.Default.Register<LocationService>();
@@ -36,7 +37,6 @@ namespace Garmin12.ViewModel
 
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
         }
     }
 }

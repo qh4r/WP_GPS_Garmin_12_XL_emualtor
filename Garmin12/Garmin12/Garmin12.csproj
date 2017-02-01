@@ -84,10 +84,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToNegativeOpacityConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\CompassData.cs" />
+    <Compile Include="Models\NavigationData.cs" />
     <Compile Include="Models\PositionEntity.cs" />
     <Compile Include="Models\PositionsStore.cs" />
     <Compile Include="NewPositionPage.xaml.cs">
@@ -98,6 +102,7 @@
     <Compile Include="Resources\Constants.cs" />
     <Compile Include="Services\CompassService.cs" />
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\DirectionService.cs" />
     <Compile Include="Services\LocationService.cs" />
     <Compile Include="Store\SelectedPositionStore.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -122,6 +127,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Converters\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

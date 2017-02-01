@@ -12,6 +12,8 @@ namespace Garmin12.Store
 
     public class SelectedPositionStore : ViewModelBase
     {
+        public event Action<PositionEntity> SelectionChanged;
+
         private PositionEntity selectedPosition;
 
         public SelectedPositionStore()
@@ -28,7 +30,11 @@ namespace Garmin12.Store
             set
             {
                 this.Set(ref this.selectedPosition, value);
+                this.RaisePropertyChanged(() => this.IsPositionSelected);
+                this.SelectionChanged?.Invoke(value);
             }
         }
+
+        public bool IsPositionSelected => this.SelectedPosition != null;
     }
 }

@@ -13,5 +13,7 @@ namespace Garmin12.Resources
     public class Constants
     {
         public string DbPath { get; } = Path.Combine(Path.Combine(ApplicationData.Current.LocalFolder.Path, "PositionsStore.sqlite"));
+
+        public double R { get; } = 6399.594;
     }
 }

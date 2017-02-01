@@ -1,0 +1,7 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Garmin12.Converters">
+    <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <local:BooleanToNegativeOpacityConverter x:Key="BooleanToNegativeOpacityConverter"/>
+</ResourceDictionary>

@@ -23,9 +23,9 @@ namespace Garmin12.ViewModel
 
         private string newPositionName;
 
-        private double longitude;
+        private string longitude;
 
-        private double latitude;
+        private string latitude;
 
         public NewPositionViewModel(LocationService locationService, DataService dataService, NavigationService navigationService)
         {
@@ -33,8 +33,7 @@ namespace Garmin12.ViewModel
             this.dataService = dataService;
             this.navigationService = navigationService;
             this.NewPositionName = string.Empty;
-            this.Latitude = 0.0;
-            this.Longitude = 0.0;
+            this.ClearFormData();
         }
 
         public string NewPositionName
@@ -49,7 +48,7 @@ namespace Garmin12.ViewModel
             }
         }
 
-        public double Longitude
+        public string Longitude
         {
             get
             {
@@ -61,7 +60,7 @@ namespace Garmin12.ViewModel
             }
         }
 
-        public double Latitude
+        public string Latitude
         {
             get
             {
@@ -83,7 +82,7 @@ namespace Garmin12.ViewModel
         public RelayCommand<string> SaveCommand => new RelayCommand<string>(
             name =>
                 {
-                    this.dataService.SavePosition(this.NewPositionName, new GpsPosition(this.Latitude, this.Longitude));
+                    this.dataService.SavePosition(this.NewPositionName, new GpsPosition(this.ToDouble(this.Latitude), this.ToDouble(this.Longitude)));
                     this.ClearFormData();
                     this.navigationService.GoBack();
                 }, (name) => !string.IsNullOrWhiteSpace(this.NewPositionName));
@@ -92,15 +91,21 @@ namespace Garmin12.ViewModel
             () =>
                 {
                     var currentPosition = this.locationService.GetLastPostion();
-                    this.Latitude = currentPosition.Latitude;
-                    this.Longitude = currentPosition.Longitude;
+                    this.Latitude = currentPosition.Latitude.ToString();
+                    this.Longitude = currentPosition.Longitude.ToString();
                 });
 
         private void ClearFormData()
         {
             this.NewPositionName = string.Empty;
-            this.Latitude = 0.0;
-            this.Longitude = 0.0;
+            this.Latitude = string.Empty;
+            this.Longitude = string.Empty;
+        }
+
+        private double ToDouble(string value)
+        {
+            double output;
+            return double.TryParse(value, out output) ? output : 0;
         }
     }
 }
