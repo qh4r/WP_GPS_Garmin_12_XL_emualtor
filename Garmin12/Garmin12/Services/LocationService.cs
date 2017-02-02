@@ -35,7 +35,7 @@ namespace Garmin12.Services
         }
 
         private void GeolocatorOnPositionChanged(Geolocator sender, PositionChangedEventArgs args)
-        {
+        {            
             this.lastPosition = new GpsPosition(
                 args.Position.Coordinate.Point.Position.Latitude,
                 args.Position.Coordinate.Point.Position.Longitude);

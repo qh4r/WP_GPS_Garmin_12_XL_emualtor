@@ -105,7 +105,8 @@ namespace Garmin12.ViewModel
         private double ToDouble(string value)
         {
             double output;
-            return double.TryParse(value, out output) ? output : 0;
+            var result =  double.TryParse(value, out output) ? output : 0;
+            return result;
         }
     }
 }

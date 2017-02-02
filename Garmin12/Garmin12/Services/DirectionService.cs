@@ -37,10 +37,14 @@ namespace Garmin12.Services
         {
             if (this.selectedPositionStore.IsPositionSelected)
             {
-                var currentLocation = this.selectedPositionStore.SelectedPosition;
-                var targetLocation = this.locationService.GetLastPostion();
-                var direction = this.CalculateDirection(currentLocation, targetLocation);
-                var distance = this.CalculateDistance(currentLocation.Longitude, currentLocation.Latitude, targetLocation.Longitude, targetLocation.Latitude);
+                var currentLocation = this.locationService.GetLastPostion();
+                var targetLocation = this.selectedPositionStore.SelectedPosition;
+                var direction = this.NormalizeDirection(this.CalculateDirection(currentLocation, targetLocation));
+                var distance = this.CalculateDistance(
+                    currentLocation.Longitude,
+                    currentLocation.Latitude,
+                    targetLocation.Longitude,
+                    targetLocation.Latitude);
                 this.NavigationDataUpdate?.Invoke(new NavigationData
                 {
                     DirectionRelatedToNorth = direction,
@@ -59,22 +63,28 @@ namespace Garmin12.Services
             return angle * this.constants.R;
         }
 
-        private double CalculateDirection(PositionEntity currentPosition, GpsPosition targetLocation)
+        private double CalculateDirection(GpsPosition currentPosition, PositionEntity targetLocation)
         {
-            return Atan2(this.CalculateY(currentPosition, targetLocation), this.CalculateX(currentPosition, targetLocation)).RadianToDegree();
+            return Atan2(this.CalculateX(currentPosition, targetLocation), this.CalculateY(currentPosition, targetLocation)).RadianToDegree();
         }
 
-        private double CalculateY(PositionEntity currentPosition, GpsPosition targetLocation)
+        private double CalculateY(GpsPosition currentPosition, PositionEntity targetLocation)
         {
             return Cos(currentPosition.LatitudeRad) * Sin(targetLocation.LatitudeRad)
                    - Sin(currentPosition.LatitudeRad) * Cos(targetLocation.LatitudeRad)
-                   * Cos((targetLocation.Longitude - currentPosition.Longitude).DegreeToRadians());
+                   * Cos(targetLocation.LongitudeRad - currentPosition.LongitudeRad);
         }
 
-        private double CalculateX(PositionEntity currentPosition, GpsPosition targetLocation)
+        private double CalculateX(GpsPosition currentPosition, PositionEntity targetLocation)
         {
             return Cos(targetLocation.LatitudeRad)
-                   * Sin((targetLocation.Longitude - currentPosition.Longitude).DegreeToRadians());
+                   * Sin(targetLocation.LongitudeRad - currentPosition.LongitudeRad);
+        }
+
+        private double NormalizeDirection(double direction)
+        {
+            //return (direction + 360) % 360;
+            return direction;
         }
     }
 }

@@ -137,9 +137,9 @@ namespace Garmin12.ViewModel
 
         public string CompassDirectionDisplay => $"{this.CompassDirection.North}";
 
-        public double CompassDirectionNormalized => 360 - this.CompassDirection.North;
+        public double CompassDirectionNormalized => (360 + this.CompassDirection.North) % 360;
 
-        public double TargetDirection => this.PositionStore.IsPositionSelected ? this.CompassDirectionNormalized + this.OffsetFromNorth : 0;
+        public double TargetDirection => this.PositionStore.IsPositionSelected ? (this.CompassDirection.North + this.OffsetFromNorth +360) % 360 : 0;
 
         public RelayCommand GoToPointCreation => new RelayCommand(() => this.navigationService.NavigateTo("newPosition"));
 
