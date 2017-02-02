@@ -104,6 +104,7 @@
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\DirectionService.cs" />
     <Compile Include="Services\LocationService.cs" />
+    <Compile Include="Services\TimerService.cs" />
     <Compile Include="Store\SelectedPositionStore.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\NewPositionViewModel.cs" />

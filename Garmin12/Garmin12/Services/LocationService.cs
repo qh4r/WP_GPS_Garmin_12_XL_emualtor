@@ -38,7 +38,9 @@ namespace Garmin12.Services
         {            
             this.lastPosition = new GpsPosition(
                 args.Position.Coordinate.Point.Position.Latitude,
-                args.Position.Coordinate.Point.Position.Longitude);
+                args.Position.Coordinate.Point.Position.Longitude,
+                args.Position.Coordinate.Point.Position.Altitude,
+                args.Position.Coordinate.Speed);
             this.LocationUpdate?.Invoke(this.lastPosition);
         }
     }

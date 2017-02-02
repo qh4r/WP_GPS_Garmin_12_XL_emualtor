@@ -23,14 +23,15 @@ namespace Garmin12.Services
 
         private readonly Constants constants;
 
-        public DirectionService(SelectedPositionStore selectedPositionStore, LocationService locationService, CompassService compassService, Constants constants)
+        private readonly TimerService timerService;
+
+        public DirectionService(SelectedPositionStore selectedPositionStore, LocationService locationService, CompassService compassService, Constants constants, TimerService timerService)
         {
             this.selectedPositionStore = selectedPositionStore;
             this.locationService = locationService;
             this.constants = constants;
-            locationService.LocationUpdate += x => this.LocationServiceOnLocationUpdate();
-            selectedPositionStore.SelectionChanged += x => this.LocationServiceOnLocationUpdate();
-            compassService.OnCompassReading += x => this.LocationServiceOnLocationUpdate();
+            this.timerService = timerService;
+            timerService.TimerUpdate += this.LocationServiceOnLocationUpdate;
         }
 
         private void LocationServiceOnLocationUpdate()

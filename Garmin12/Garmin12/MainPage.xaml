@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" FontSize="42">
+    mc:Ignorable="d" 
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" FontSize="42" FontFamily="Global Monospace">
     <Page.DataContext>
         <Binding Source="{StaticResource Locator}" Path="Main"></Binding>
     </Page.DataContext>
@@ -165,19 +165,32 @@
         <PivotItem CommonNavigationTransitionInfo.IsStaggerElement="True">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="1" HorizontalAlignment="Center">- - -</TextBlock>
-                <TextBlock Grid.Row="2" HorizontalAlignment="Center">North:</TextBlock>
-                <TextBlock Grid.Row="3" HorizontalAlignment="Center" Text="{Binding CompassDirectionDisplay}"/>
-                <TextBlock Grid.Row="4" HorizontalAlignment="Center" Text="Position:"/>
-                <TextBlock Grid.Row="5" HorizontalAlignment="Center" Text="{Binding PositionFormatted}"/>
+                <TextBlock Grid.Row="1" HorizontalAlignment="Center">Prędkość:</TextBlock>
+                <TextBlock Grid.Row="2" HorizontalAlignment="Center" Text="{Binding SpeedFormatted}"/>
+                <Border BorderThickness="0 2 0 0" BorderBrush="White" Grid.Row="3" />
+                <TextBlock Grid.Row="4" HorizontalAlignment="Center">Wysokość:</TextBlock>
+                <TextBlock Grid.Row="5" HorizontalAlignment="Center" Text="{Binding AltitudeFormatted}"/>
+                <Border BorderThickness="0 2 0 0" BorderBrush="White" Grid.Row="6" />
+                <!--<TextBlock Grid.Row="4" HorizontalAlignment="Center" Text="{Binding CompassDirectionDisplay}"/>-->
+                <TextBlock Grid.Row="7" HorizontalAlignment="Center" Text="Pozycja:"/>
+                <TextBlock Grid.Row="8" HorizontalAlignment="Center" Text="{Binding PositionFormatted}"/>
+                <Border BorderThickness="0 2 0 0" BorderBrush="White" Grid.Row="9" />
+                <TextBlock Grid.Row="10" HorizontalAlignment="Center" Text="Czas:"/>
+                <TextBlock Grid.Row="11" HorizontalAlignment="Center" Text="{Binding TimeNow}"/>
             </Grid>
         </PivotItem>
         <PivotItem CommonNavigationTransitionInfo.IsStaggerElement="True">

@@ -4,6 +4,7 @@ namespace Garmin12.ViewModel
 {
     using System;
     using System.Diagnostics;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using Windows.UI.Xaml.Controls;
@@ -26,6 +27,8 @@ namespace Garmin12.ViewModel
 
         private readonly DirectionService directionService;
 
+        private readonly TimerService timerService;
+
         private GpsPosition position;
 
         private CompassData compassDirection;
@@ -34,12 +37,15 @@ namespace Garmin12.ViewModel
 
         private double offsetFromNorth;
 
+        private string timeNow;
+
         public MainViewModel(LocationService locationService,
             DataService dataDataService,
             SelectedPositionStore selectedPositionStore,
             CompassService compassService,
             NavigationService navigationService,
-            DirectionService directionService)
+            DirectionService directionService,
+            TimerService timerService)
         {
             this.Position = new GpsPosition(0, 0);
             this.CompassDirection = new CompassData(0);
@@ -48,21 +54,25 @@ namespace Garmin12.ViewModel
             this.compassService = compassService;
             this.navigationService = navigationService;
             this.directionService = directionService;
+            this.timerService = timerService;
             this.PositionStore = selectedPositionStore;
             this.DataService = dataDataService;
             this.locationService.LocationUpdate += this.OnLocationUpdate;
             this.compassService.OnCompassReading += this.CompassReadingUpdate;
             directionService.NavigationDataUpdate += this.OnNavigationDataUpdate;
+            timerService.TimerUpdate += this.TimerServiceOnTimerUpdate;            
         }
 
-        private async void OnNavigationDataUpdate(NavigationData navigationData)
+        public string TimeNow
         {
-            await DispatcherHelper.RunAsync(
-                () =>
-                    {
-                        this.DistanceToTarget = navigationData.DistanceFromTarget;
-                        this.OffsetFromNorth = navigationData.DirectionRelatedToNorth;
-                    });
+            get
+            {
+                return this.timeNow;
+            }
+            set
+            {
+                this.Set(ref this.timeNow, value);
+            }
         }
 
         public double OffsetFromNorth
@@ -100,12 +110,16 @@ namespace Garmin12.ViewModel
             {
                 this.Set(ref this.position, value);
                 this.RaisePropertyChanged(() => this.PositionFormatted);
+                this.RaisePropertyChanged(() => this.SpeedFormatted);
+                this.RaisePropertyChanged(() => this.AltitudeFormatted);
             }
         }
 
-        public string PositionFormatted => $"X: {this.Position.Latitude},\nY: {this.Position.Longitude}";
+        public string PositionFormatted => $"{this.GetLongitudeSign(this.Position.Longitude)} {this.Position.Longitude}\n{this.GetLatitudeSign(this.Position.Latitude)} {this.Position.Latitude}";
 
+        public string AltitudeFormatted => $"{this.Position.Altitude} m {this.GetAltitudeSign(this.Position.Altitude)}";
 
+        public string SpeedFormatted => this.Position.Speed > -.05 ? $"{this.Position.Speed} km/h" : "-";
 
         public DataService DataService { get; }
 
@@ -162,5 +176,31 @@ namespace Garmin12.ViewModel
                    this.CompassDirection = compassData;
                });
         }
+
+        private string GetLatitudeSign(double latitude) => latitude > 0 ? "E" : "W";
+
+        private string GetLongitudeSign(double longitude) => longitude > 0 ? "N" : "S";
+
+        private string GetAltitudeSign(double altitude) => altitude > 0 ? "npm" : "ppm";
+
+        private async void TimerServiceOnTimerUpdate()
+        {
+            await DispatcherHelper.RunAsync(
+                () =>
+                {
+                    this.TimeNow = DateTime.Now.ToString("HH:mm:ss");
+                });
+        }
+
+        private async void OnNavigationDataUpdate(NavigationData navigationData)
+        {
+            await DispatcherHelper.RunAsync(
+                () =>
+                {
+                    this.DistanceToTarget = navigationData.DistanceFromTarget;
+                    this.OffsetFromNorth = navigationData.DirectionRelatedToNorth;
+                });
+        }
+
     }
 }

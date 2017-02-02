@@ -17,6 +17,7 @@ namespace Garmin12.ViewModel
         {                       
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
+            SimpleIoc.Default.Register<TimerService>();
             SimpleIoc.Default.Register<NavigationService>();
             SimpleIoc.Default.GetInstance<NavigationService>().Configure("newPosition", typeof(NewPositionPage));
             SimpleIoc.Default.GetInstance<NavigationService>().Configure("main", typeof(MainPage));
