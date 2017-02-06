@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -143,8 +144,13 @@ namespace Garmin12.ViewModel
         private double ToDouble(string value)
         {
             double output;
-            var result =  double.TryParse(value, out output) ? output : 0;
-            return result;
+            return double.TryParse(
+                value.Replace(",", "."),
+                NumberStyles.Float,
+                CultureInfo.InvariantCulture,
+                out output)
+                       ? output
+                       : 0;
         }
     }
 }
