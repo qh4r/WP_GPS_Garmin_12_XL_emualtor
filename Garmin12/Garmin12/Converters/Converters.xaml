@@ -4,4 +4,5 @@
     xmlns:local="using:Garmin12.Converters">
     <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <local:BooleanToNegativeOpacityConverter x:Key="BooleanToNegativeOpacityConverter"/>
+    <local:IndexMatchToVisibilityConverter  x:Key="IndexMatchToVisibilityConverter"/>
 </ResourceDictionary>

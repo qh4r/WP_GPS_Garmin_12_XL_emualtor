@@ -39,6 +39,8 @@ namespace Garmin12.ViewModel
 
         private string timeNow;
 
+        private int pivotIndex;
+
         public MainViewModel(LocationService locationService,
             DataService dataDataService,
             SelectedPositionStore selectedPositionStore,
@@ -157,7 +159,15 @@ namespace Garmin12.ViewModel
 
         public RelayCommand GoToPointCreation => new RelayCommand(() => this.navigationService.NavigateTo("newPosition"));
 
+        public RelayCommand GoToPointUpdate => new RelayCommand(() => this.navigationService.NavigateTo("newPosition", this.PositionStore.SelectedPosition));
+
         public RelayCommand ClearFilter => new RelayCommand(() => this.DataService.NameFilter = string.Empty);
+
+        public int PivotIndex
+        {
+            get { return pivotIndex; }
+            set { Set(ref pivotIndex, value); }
+        }
 
         private async void OnLocationUpdate(GpsPosition gpsPosition)
         {

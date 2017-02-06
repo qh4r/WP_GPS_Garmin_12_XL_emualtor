@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Garmin12.Extensions;
 
 namespace Garmin12.ViewModel
 {
@@ -13,7 +15,7 @@ namespace Garmin12.ViewModel
     using Garmin12.Models;
     using Garmin12.Services;
 
-    public class NewPositionViewModel : ViewModelBase
+    public class NewPositionViewModel : ViewModelBase, INavigable
     {
         private readonly LocationService locationService;
 
@@ -26,12 +28,13 @@ namespace Garmin12.ViewModel
         private string longitude;
 
         private string latitude;
+        private PositionEntity pointToEdit;
 
         public NewPositionViewModel(LocationService locationService, DataService dataService, NavigationService navigationService)
-        {
+        {            
             this.locationService = locationService;
             this.dataService = dataService;
-            this.navigationService = navigationService;
+            this.navigationService = navigationService;            
             this.NewPositionName = string.Empty;
             this.ClearFormData();
         }
@@ -82,8 +85,14 @@ namespace Garmin12.ViewModel
         public RelayCommand<string> SaveCommand => new RelayCommand<string>(
             name =>
                 {
-                    this.dataService.SavePosition(this.NewPositionName, new GpsPosition(this.ToDouble(this.Latitude), this.ToDouble(this.Longitude)));
-                    this.ClearFormData();
+                    if (PointToEdit != null)
+                    {
+                        this.dataService.UpdatePosition(PointToEdit.Id, this.NewPositionName, new GpsPosition(this.ToDouble(this.Latitude), this.ToDouble(this.Longitude)));
+                    }
+                    else
+                    {
+                        this.dataService.SavePosition(this.NewPositionName, new GpsPosition(this.ToDouble(this.Latitude), this.ToDouble(this.Longitude)));
+                    }
                     this.navigationService.GoBack();
                 }, (name) => !string.IsNullOrWhiteSpace(this.NewPositionName));
 
@@ -94,6 +103,35 @@ namespace Garmin12.ViewModel
                     this.Latitude = currentPosition.Latitude.ToString();
                     this.Longitude = currentPosition.Longitude.ToString();
                 });
+
+        public PositionEntity PointToEdit
+        {
+            get { return this.pointToEdit; }
+            set { this.Set(ref this.pointToEdit, value); }
+        }
+
+        public void Activate(object parameter)
+        {
+            var point = parameter as PositionEntity;
+            if (point != null)
+            {
+                this.PointToEdit = point;
+                this.SetFormData(this.PointToEdit);
+            }           
+        }
+
+        public void Deactivate(object parameter)
+        {
+            this.ClearFormData();
+            this.PointToEdit = null;
+        }
+
+        private void SetFormData(PositionEntity point)
+        {
+            this.NewPositionName = point.Name;
+            this.Latitude = point.Latitude.ToString();
+            this.Longitude = point.Longitude.ToString();
+        }
 
         private void ClearFormData()
         {

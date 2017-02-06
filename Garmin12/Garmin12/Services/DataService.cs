@@ -89,6 +89,40 @@ namespace Garmin12.Services
                     });
         }
 
+        public async void UpdatePosition(long id, string name, GpsPosition location)
+        {
+            var serializedPosition = new PositionEntity
+            {
+                Id = id,
+                Latitude = location.Latitude,
+                Longitude = location.Longitude,
+                Name = name
+            };
+            await Task.Run(
+                () =>
+                {
+                    var updatedPosition = this.store.UpdatePosition(serializedPosition);
+                    var toSubstitute = this.PositionsList.FirstOrDefault(x => x.Id == updatedPosition.Id);
+                    var index = this.PositionsList.IndexOf(toSubstitute);                    
+                    return new
+                    {
+                        index,
+                        updatedPosition
+                    };
+                }).ContinueWith(
+                        async result =>
+                        {
+                            await DispatcherHelper.RunAsync(
+                                () =>
+                                {
+                                    this.PositionsList.RemoveAt(result.Result.index);
+                                    this.PositionsList.Insert(result.Result.index, result.Result.updatedPosition);
+                                    this.selectedPositionStore.SelectedPosition = result.Result.updatedPosition;
+                                    this.RaisePropertyChanged(() => this.FilteredPositions);
+                                });
+                        });
+        }
+
         public async void DeletePositon(PositionEntity position)
         {
             await Task.Run(

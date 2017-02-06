@@ -86,6 +86,9 @@
     </Compile>
     <Compile Include="Converters\BooleanToNegativeOpacityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\IndexMatchToVisibilityConverter.cs" />
+    <Compile Include="Extensions\BindablePage.cs" />
+    <Compile Include="Extensions\INavigable.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

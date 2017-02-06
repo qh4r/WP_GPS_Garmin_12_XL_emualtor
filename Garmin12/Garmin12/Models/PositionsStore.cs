@@ -62,11 +62,11 @@ namespace Garmin12.Models
             }
         }
 
-        public int InsertPosition(PositionEntity newcontact)
+        public int InsertPosition(PositionEntity newPosition)
         {
             using (var db = new SQLiteConnection(this.DbPath))
             {
-               return db.Insert(newcontact);
+                return db.Insert(newPosition);
             }
         }
 
@@ -79,6 +79,23 @@ namespace Garmin12.Models
                 {
                     db.Delete(position);
                 }
+            }
+        }
+
+        public PositionEntity UpdatePosition(PositionEntity newPosition)
+        {
+            using (var db = new SQLiteConnection(this.DbPath))
+            {
+                var contractToUpdate =
+                    db.Query<PositionEntity>("select * from PositionEntity where Id =" + newPosition.Id).FirstOrDefault();
+                if (contractToUpdate != null)
+                {
+                    contractToUpdate.Name = newPosition.Name;
+                    contractToUpdate.Latitude = newPosition.Latitude;
+                    contractToUpdate.Longitude = newPosition.Longitude;
+                    db.Update(contractToUpdate);
+                }
+                return contractToUpdate;
             }
         }
     }
