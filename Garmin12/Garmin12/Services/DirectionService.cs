@@ -40,17 +40,20 @@ namespace Garmin12.Services
             {
                 var currentLocation = this.locationService.GetLastPostion();
                 var targetLocation = this.selectedPositionStore.SelectedPosition;
-                var direction = this.NormalizeDirection(this.CalculateDirection(currentLocation, targetLocation));
-                var distance = this.CalculateDistance(
-                    currentLocation.Longitude,
-                    currentLocation.Latitude,
-                    targetLocation.Longitude,
-                    targetLocation.Latitude);
-                this.NavigationDataUpdate?.Invoke(new NavigationData
+                if (currentLocation != null && targetLocation != null)
                 {
-                    DirectionRelatedToNorth = direction,
-                    DistanceFromTarget = distance
-                });
+                    var direction = this.NormalizeDirection(this.CalculateDirection(currentLocation, targetLocation));
+                    var distance = this.CalculateDistance(
+                        currentLocation.Longitude,
+                        currentLocation.Latitude,
+                        targetLocation.Longitude,
+                        targetLocation.Latitude);
+                    this.NavigationDataUpdate?.Invoke(new NavigationData
+                    {
+                        DirectionRelatedToNorth = direction,
+                        DistanceFromTarget = distance
+                    });
+                }
             }
         }
 

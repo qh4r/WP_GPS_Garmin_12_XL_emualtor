@@ -117,9 +117,9 @@ namespace Garmin12.ViewModel
             }
         }
 
-        public string PositionFormatted => $"{this.GetLongitudeSign(this.Position.Longitude)} {this.Position.Longitude}\n{this.GetLatitudeSign(this.Position.Latitude)} {this.Position.Latitude}";
+        public string PositionFormatted => $"{this.GetLongitudeSign(this.Position.Longitude)} {Math.Round(Position.Longitude, 5)}\n{this.GetLatitudeSign(this.Position.Latitude)} {Math.Round(this.Position.Latitude, 5)}";
 
-        public string AltitudeFormatted => $"{this.Position.Altitude} m {this.GetAltitudeSign(this.Position.Altitude)}";
+        public string AltitudeFormatted => $"{Math.Round(this.Position.Altitude, 5)} m {this.GetAltitudeSign(this.Position.Altitude)}";
 
         public string SpeedFormatted => this.Position.Speed > -.05 ? $"{this.Position.Speed} km/h" : "-";
 
