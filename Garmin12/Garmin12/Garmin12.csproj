@@ -85,6 +85,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToNegativeOpacityConverter.cs" />
+    <Compile Include="Converters\BooleanToNegativeVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IndexMatchToVisibilityConverter.cs" />
     <Compile Include="Extensions\BindablePage.cs" />

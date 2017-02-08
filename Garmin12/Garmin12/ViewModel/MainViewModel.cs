@@ -19,8 +19,6 @@ namespace Garmin12.ViewModel
 
     public class MainViewModel : ViewModelBase
     {
-        private readonly LocationService locationService;
-
         private readonly CompassService compassService;
 
         private readonly NavigationService navigationService;
@@ -52,14 +50,14 @@ namespace Garmin12.ViewModel
             this.Position = new GpsPosition(0, 0);
             this.CompassDirection = new CompassData(0);
             this.OffsetFromNorth = 0;
-            this.locationService = locationService;
+            this.LocationService = locationService;
             this.compassService = compassService;
             this.navigationService = navigationService;
             this.directionService = directionService;
             this.timerService = timerService;
             this.PositionStore = selectedPositionStore;
             this.DataService = dataDataService;
-            this.locationService.LocationUpdate += this.OnLocationUpdate;
+            this.LocationService.LocationUpdate += this.OnLocationUpdate;
             this.compassService.OnCompassReading += this.CompassReadingUpdate;
             directionService.NavigationDataUpdate += this.OnNavigationDataUpdate;
             timerService.TimerUpdate += this.TimerServiceOnTimerUpdate;            
@@ -121,7 +119,7 @@ namespace Garmin12.ViewModel
 
         public string AltitudeFormatted => $"{Math.Round(this.Position.Altitude, 5)} m {this.GetAltitudeSign(this.Position.Altitude)}";
 
-        public string SpeedFormatted => this.Position.Speed > -.05 ? $"{this.Position.Speed} km/h" : "-";
+        public string SpeedFormatted => $"{Math.Round(this.Position.Speed,2)} km/h";
 
         public DataService DataService { get; }
 
@@ -168,6 +166,8 @@ namespace Garmin12.ViewModel
             get { return pivotIndex; }
             set { Set(ref pivotIndex, value); }
         }
+
+        public LocationService LocationService { get; }
 
         private async void OnLocationUpdate(GpsPosition gpsPosition)
         {
